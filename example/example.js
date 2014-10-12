@@ -17,22 +17,20 @@ precision mediump float;\n\
 varying vec2 uv;\n\
 uniform vec3 lightPosition;\n\
 void main() {\n\
-  float r = sqrt(dot(uv,uv));\
-  float theta = atan(uv.y,uv.x);\
-  float phi   = asin(r);\
+  float r = sqrt(dot(uv,uv));\n\
+  float theta = atan(uv.y,uv.x);\n\
+  float phi   = asin(r);\n\
   vec3 normal = vec3(\
     cos(theta)*sin(phi),\
     sin(theta)*sin(phi),\
     -cos(phi));\n\
   vec3 position = vec3(normal.xy, normal.z+5.0);\n\
   vec3 eyeDir = normalize(-position);\n\
+  vec3 lightDir = normalize(lightPosition - position);\n\
   if(r > 1.0 || dot(normal,eyeDir)<0.0) {\n\
     gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n\
   } else {\n\
-    vec3 fiber = normalize(vec3(uv,0) - dot(vec3(uv,0), normal)*normal);\
-    vec3 perp = normalize(cross(fiber, normal));\
-    vec3 lightDir = normalize(lightPosition - position);\
-    float power = specular(lightDir, eyeDir, normal, fiber, perp, 0.1,0.8);\n\
+    float power = specular(lightDir, eyeDir, normal, 0.9, 0.5);\n\
     gl_FragColor = vec4(power,power,power, 1.0);\n\
   }\n\
 }',
@@ -40,10 +38,10 @@ void main() {\n\
 })
 
 var canvas = document.createElement('canvas')
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
-canvas.style.left = "0px"
-canvas.style.top = "0px"
+canvas.width          = window.innerWidth
+canvas.height         = window.innerHeight
+canvas.style.left     = "0px"
+canvas.style.top      = "0px"
 canvas.style.position = "absolute"
 document.body.appendChild(canvas)
 
