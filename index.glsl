@@ -1,4 +1,4 @@
-#pragma glslify: beckmannSpecular = require(glsl-specular-beckmann)
+#pragma glslify: beckmannDistribution = require(glsl-specular-beckmann/distribution)
 
 float cookTorranceSpecular(
   vec3 lightDirection,
@@ -7,30 +7,28 @@ float cookTorranceSpecular(
   float roughness,
   float fresnel) {
 
-  float VdotN = dot(viewDirection, surfaceNormal);
-  float LdotN = dot(lightDirection, surfaceNormal);
+  float VdotN = max(dot(viewDirection, surfaceNormal), 0.0);
+  float LdotN = max(dot(lightDirection, surfaceNormal), 0.0);
 
   //Half angle vector
   vec3 H = normalize(lightDirection + viewDirection);
 
-  //Distribution term
-  float D = beckmannSpecular(
-    lightDirection, 
-    viewDirection, 
-    surfaceNormal, 
-    roughness);
-
   //Geometric term
-  float NdotH = dot(surfaceNormal, H);
-  float VdotH = dot(viewDirection, H);
-  float w = 2.0 * NdotH / VdotH;
-  float G = min(1.0, min(w*VdotN, w*LdotN));
+  float NdotH = max(dot(surfaceNormal, H), 0.0);
+  float VdotH = max(dot(viewDirection, H), 0.0001);
+  float LdotH = max(dot(lightDirection, H), 0.0001);
+  float G1 = (2.0 * NdotH * VdotN) / VdotH;
+  float G2 = (2.0 * NdotH * LdotN) / LdotH;
+  float G = min(1.0, min(G1, G2));
+  
+  //Distribution term
+  float D = beckmannDistribution(NdotH, roughness);
 
   //Fresnel term
-  float F = pow(1.0 + VdotN, fresnel);
+  float F = pow(1.0 - VdotN, fresnel);
 
   //Multiply terms and done
-  return D * F * G / (3.14159265 * VdotN * LdotN);
+  return  G * F * D / (3.14159265 * VdotN);
 }
 
 #pragma glslify: export(cookTorranceSpecular)

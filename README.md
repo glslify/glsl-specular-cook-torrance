@@ -61,5 +61,7 @@ Computes the specular power in the Cook-Torrance
 
 **Returns** A `float` representing the specular power
 
+**Note** Unlike the usual Cook-Torrance model, the light power is not scaled by 1/(normal . lightDirection).  This avoids an unnecessary numerically unstable division, but requires modifying how diffuse light is calculated.
+
 # License
 (c) 2014 Mikola Lysenko. MIT License

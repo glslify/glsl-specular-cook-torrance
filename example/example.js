@@ -30,7 +30,7 @@ void main() {\n\
   if(r > 1.0 || dot(normal,eyeDir)<0.0) {\n\
     gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n\
   } else {\n\
-    float power = specular(lightDir, eyeDir, normal, 0.9, 0.5);\n\
+    float power = 10.0 * specular(lightDir, eyeDir, normal, 0.2, 1.0);\n\
     gl_FragColor = vec4(power,power,power, 1.0);\n\
   }\n\
 }',
@@ -53,7 +53,7 @@ function render() {
   var theta = Date.now()*0.0005
   var x = Math.cos(theta)
   var y = Math.sin(theta)
-  shader.uniforms.lightPosition = [30.0*x, 10.0, 30.0*y]
+  shader.uniforms.lightPosition = [100.0*x, 10.0, 100.0*y]
   drawTriangle(gl)
   requestAnimationFrame(render)
 }
