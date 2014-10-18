@@ -37,6 +37,6 @@
     "transform": "glslify"
   },
   "dependencies": {
-    "glsl-specular-beckmann": "^1.1.0"
+    "glsl-specular-beckmann": "^1.1.1"
   }
 }
