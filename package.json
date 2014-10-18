@@ -1,6 +1,6 @@
 {
   "name": "glsl-specular-cook-torrance",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Cook-Torrance specular/fresnel lighting term",
   "main": "index.js",
   "directories": {
