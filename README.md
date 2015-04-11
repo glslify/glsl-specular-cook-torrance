@@ -39,7 +39,7 @@ void main() {
 Install with npm:
 
 ```
-npm install glsl-specular-phong
+npm install glsl-specular-cook-torrance
 ```
 
 Then use with [glslify](https://github.com/stackgl/glslify).
