@@ -28,7 +28,7 @@ float cookTorranceSpecular(
   float F = pow(1.0 - VdotN, fresnel);
 
   //Multiply terms and done
-  return  G * F * D / max(3.14159265 * VdotN, 0.000001);
+  return  G * F * D / max(3.14159265 * VdotN * LdotN, 0.000001);
 }
 
 #pragma glslify: export(cookTorranceSpecular)
