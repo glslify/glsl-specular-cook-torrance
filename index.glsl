@@ -16,10 +16,8 @@ float cookTorranceSpecular(
   //Geometric term
   float NdotH = max(dot(surfaceNormal, H), 0.0);
   float VdotH = max(dot(viewDirection, H), 0.000001);
-  float LdotH = max(dot(lightDirection, H), 0.000001);
-  float G1 = (2.0 * NdotH * VdotN) / VdotH;
-  float G2 = (2.0 * NdotH * LdotN) / LdotH;
-  float G = min(1.0, min(G1, G2));
+  float x = 2.0 * NdotH / VdotH;
+  float G = min(1.0, min(x * VdotN, x * LdotN));
   
   //Distribution term
   float D = beckmannDistribution(NdotH, roughness);
