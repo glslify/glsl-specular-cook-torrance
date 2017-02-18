@@ -29,9 +29,9 @@
   },
   "homepage": "https://github.com/stackgl/glsl-specular-cook-torrance",
   "devDependencies": {
-    "a-big-triangle": "^1.0.0",
-    "glslify": "^1.6.0",
-    "beefy": "^2.1.1"
+    "a-big-triangle": "^1.0.3",
+    "gl-shader": "^4.2.1",
+    "glslify": "^6.0.1"
   },
   "browserify": {
     "transform": "glslify"

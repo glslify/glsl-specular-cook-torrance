@@ -1,41 +1,40 @@
 'use strict'
 
-var glslify = require('glslify')
+var glsl = require('glslify')
 var drawTriangle = require('a-big-triangle')
+var createShader = require('gl-shader')
 
-var createShader = glslify({
-  vert: '\
-attribute vec2 position;\
-varying vec2 uv;\
-void main() {\
-  uv = position;\
-  gl_Position = vec4(position,0,1);\
-}',
-  frag: '\
-precision mediump float;\n\
-#pragma glslify: specular = require(../index.glsl)\n\
-varying vec2 uv;\n\
-uniform vec3 lightPosition;\n\
-void main() {\n\
-  float r = sqrt(dot(uv,uv));\n\
-  float theta = atan(uv.y,uv.x);\n\
-  float phi   = asin(r);\n\
+var vert = glsl`
+attribute vec2 position;
+varying vec2 uv;
+void main() {
+  uv = position;
+  gl_Position = vec4(position,0,1);
+}`
+
+var frag = glsl`
+precision mediump float;
+#pragma glslify: specular = require(../index.glsl)
+varying vec2 uv;
+uniform vec3 lightPosition;
+void main() {
+  float r = sqrt(dot(uv,uv));
+  float theta = atan(uv.y,uv.x);
+  float phi   = asin(r);
   vec3 normal = vec3(\
     cos(theta)*sin(phi),\
     sin(theta)*sin(phi),\
-    -cos(phi));\n\
-  vec3 position = vec3(normal.xy, normal.z+5.0);\n\
-  vec3 eyeDir = normalize(-position);\n\
-  vec3 lightDir = normalize(lightPosition - position);\n\
-  if(r > 1.0 || dot(normal,eyeDir)<0.0) {\n\
-    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\n\
-  } else {\n\
-    float power = 10.0 * specular(lightDir, eyeDir, normal, 0.2, 1.0);\n\
-    gl_FragColor = vec4(power,power,power, 1.0);\n\
-  }\n\
-}',
-  inline: true
-})
+    -cos(phi));
+  vec3 position = vec3(normal.xy, normal.z+5.0);
+  vec3 eyeDir = normalize(-position);
+  vec3 lightDir = normalize(lightPosition - position);
+  if(r > 1.0 || dot(normal,eyeDir)<0.0) {
+    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+  } else {
+    float power = 10.0 * specular(lightDir, eyeDir, normal, 0.2, 1.0);
+    gl_FragColor = vec4(power,power,power, 1.0);
+  }
+}`
 
 var canvas = document.createElement('canvas')
 canvas.width          = window.innerWidth
@@ -46,7 +45,7 @@ canvas.style.position = "absolute"
 document.body.appendChild(canvas)
 
 var gl = canvas.getContext('webgl')
-var shader = createShader(gl)
+var shader = createShader(gl, vert, frag)
 
 function render() {
   shader.bind()
